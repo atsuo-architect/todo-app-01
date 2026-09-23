@@ -14,18 +14,28 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Build containers
         run: docker compose build
 
       - name: Start containers
         run: docker compose up -d
-
-      - name: Run migrations
+              
+      - name: Wait for PostgreSQL
         run: |
-          docker compose exec -T web \
-            python manage.py migrate
+          for i in {1..30}; do
+            if docker compose exec -T db pg_isready -U myuser -d mydatabase; then
+              echo "PostgreSQL is ready"
+              break
+            fi
+            echo "Waiting for PostgreSQL..."
+            sleep 2
+          done
+            - name: Run migrations
+              run: |
+                docker compose exec -T web \
+                  python manage.py migrate
 
       - name: Run tests
         run: |
