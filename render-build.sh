@@ -9,6 +9,20 @@ python manage.py collectstatic --noinput
 python manage.py migrate
 
 python manage.py shell -c '
+from django.db import connection
+
+tables = connection.introspection.table_names()
+
+print("=== DATABASE TABLES ===")
+for table in sorted(tables):
+    print(table)
+
+print("=== END ===")
+'
+
+
+
+python manage.py shell -c '
 import os
 from django.contrib.auth import get_user_model
 
