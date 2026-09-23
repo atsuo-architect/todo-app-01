@@ -31,7 +31,7 @@ services:
     name: todo-app-01-redis
     plan: free
     maxmemoryPolicy: allkeys-lru
-
+    ipAllowList: []
 
 databases:
   - name: todo-app-01-db
