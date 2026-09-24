@@ -5,3 +5,5 @@ db.sqlite3
 .DS_Store
 .pytest_cache/
 staticfiles/
+postman/*.postman_environment.json
+!postman/*.postman_environment.example.json
