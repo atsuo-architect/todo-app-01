@@ -22,8 +22,10 @@ class TodoViewSet(viewsets.ModelViewSet):
         cached_data = cache.get(cache_key)
 
         if cached_data is not None:
+            print("CACHE HIT")
             return Response(cached_data)
 
+        print("CACHE MISS - DB QUERY")
         queryset = self.filter_queryset(self.get_queryset())
         serializer = self.get_serializer(queryset, many=True)
 
@@ -34,6 +36,7 @@ class TodoViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
         cache.delete(f"todos_user_{self.request.user.id}")
+        print("DELETE CACHE")
 
     def perform_update(self, serializer):
         serializer.save()
